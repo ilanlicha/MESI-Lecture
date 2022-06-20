@@ -1,0 +1,173 @@
+<mat-toolbar color="primary" *ngIf="this.app">
+  Visualisation : {{ app.name }}
+</mat-toolbar>
+
+<mat-spinner *ngIf="!this.app"></mat-spinner>
+<div class="container main" *ngIf="this.app">
+  <div class="container secondary" novalidate>
+
+    <div class="container header">
+      <div class="container onOff">
+        <button mat-raised-button class="button configurer haut" [routerLink]="['/config']"
+          [queryParams]="{ id: id}">Configurer</button>
+        <div>
+          <div *ngIf="app.status == 'ON'">
+            <button mat-raised-button color="danger" (click)="off()">Eteindre</button>
+            <button mat-raised-button color="success" (click)="acceder()">Accéder</button>
+            <button mat-raised-button color="primary" [routerLink]="['/viewlogs']"
+              [queryParams]="{ id: app._id}">Logs</button>
+          </div>
+    
+          <div *ngIf="app.status == 'OFF'">
+            <button mat-raised-button color="primary" (click)="on()">Lancer</button>
+            <button mat-raised-button color="primary" [routerLink]="['/viewlogs']"
+              [queryParams]="{ id: app._id}">Logs</button>
+          </div>
+    
+          <div *ngIf="app.status == 'Chargement'">
+            <button mat-raised-button disabled>...</button>
+          </div>
+        </div>
+      </div>
+      <button mat-raised-button class="button applications" routerLink="/">Applications</button>
+    </div>
+
+    <div class="container informations" *ngIf="this.app">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{app.name}}</mat-card-title>
+          <mat-card-subtitle>{{app.ins}}</mat-card-subtitle>
+          <div style="flex: 1;padding:1em"></div>
+          <div class="statusChip">
+            <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip>
+            <mat-chip *ngIf="app.status == 'OFF'" color="danger" selected>{{app.status}}</mat-chip>
+            <mat-chip *ngIf="app.status == 'Chargement'" color="warn" selected>{{app.status}}</mat-chip>
+          </div>
+          <mat-chip-list>
+            <mat-chip *ngIf="app.portFront" matTooltip="Port front">{{app.portFront}}</mat-chip>
+            <mat-chip *ngIf="!app.portFront" matTooltip="Port front">Port manquant</mat-chip>
+          </mat-chip-list>
+        </mat-card-header>
+        <mat-card-content>
+          {{app.description}}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container body">
+    <div class="items">
+      <h4>Docker :</h4>
+
+      <mat-tab-group dynamicHeight>
+        <mat-tab label="Front - {{app.portFront? 'Port: ' + app.portFront : 'Port manquant'}}">
+          <app-log-highlight [code]="app.frontEnd" language="yaml"></app-log-highlight>
+        </mat-tab>
+        <mat-tab label="Back - {{app.portBack? 'Port: ' + app.portBack : 'Port manquant'}}">
+          <app-log-highlight [code]="app.backEnd" language="yaml"></app-log-highlight>
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+
+    <mat-divider vertical class="verticaldivider"></mat-divider>
+
+    <div class="items">
+      <h4>Fichier(s) source :</h4>
+
+      <mat-list class="form-element">
+        <div *ngIf="app.sourceFiles.length === 0">
+          <mat-list-item>Pas de fichier</mat-list-item>
+        </div>
+        <div *ngFor="let file of app.sourceFiles; let i = index"
+          (dragover)="onDragOver($event);dragZone.style.background='rgb(70,70,70)';"
+          (dragleave)="dragZone.style.background='transparent';" (drop)="onDropSuccess($event, i, 'source')" #dragZone>
+          <mat-list-item>
+            <mat-icon>insert_drive_file</mat-icon>
+            <div class="fileList">
+              {{file.name}}
+              <div class="fileListRightIcons">
+                <mat-icon *ngIf="file.status === 'no'" class="statusno">close</mat-icon>
+                <mat-icon *ngIf="file.status === 'yes'" class="statusyes">done</mat-icon>
+
+                <input type="file" class="file-input" (change)="preUpload($event, i, 'source')" #sourceFileUpload>
+                <div>
+                  <button mat-icon-button color="primary" class="upload-btn" (click)="sourceFileUpload.click()"
+                    type="button" [disabled]="uploading">
+                    <mat-icon>upload_file</mat-icon>
+                  </button>
+                </div>
+
+                <button mat-icon-button type="button" (click)="deleteFile(file.name, 'source')">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-list-item>
+          <mat-divider *ngIf="i !== app.sourceFiles.length-1"></mat-divider>
+        </div>
+      </mat-list>
+
+      <div class="progress" *ngIf="uploadProgressSource">
+        <mat-chip>
+          {{this.fileUploadingName}}
+          <mat-icon class="cancel-upload" (click)="cancelUpload()">cancel</mat-icon>
+        </mat-chip>
+        <mat-progress-bar class="progress-bar" mode="determinate" [value]="uploadProgressSource">
+        </mat-progress-bar>
+      </div>
+    </div>
+
+    <mat-divider vertical class="verticaldivider"></mat-divider>
+
+    <div class="items">
+      <h4>Fichier(s) de configuration :</h4>
+
+      <mat-list class="form-element">
+        <div *ngIf="app.configFiles.length === 0">
+          <mat-list-item>Pas de fichier</mat-list-item>
+        </div>
+        <div *ngFor="let file of app.configFiles; let i = index"
+          (dragover)="onDragOver($event);dragZone.style.background='rgb(70,70,70)';"
+          (dragleave)="dragZone.style.background='transparent';" (drop)="onDropSuccess($event, i, 'config')" #dragZone>
+          <mat-list-item>
+            <mat-icon>insert_drive_file</mat-icon>
+            <div class="fileList">
+              {{file.name}}
+              <div class="fileListRightIcons">
+                <mat-icon *ngIf="file.status === 'no'" class="statusno">close</mat-icon>
+                <mat-icon *ngIf="file.status === 'yes'" class="statusyes">done</mat-icon>
+
+                <input type="file" class="file-input" (change)="preUpload($event, i, 'config')" #configFileUpload>
+                <div>
+                  <button mat-icon-button color="primary" class="upload-btn" (click)="configFileUpload.click()"
+                    type="button">
+                    <mat-icon>upload_file</mat-icon>
+                  </button>
+                </div>
+
+                <button mat-icon-button type="button" (click)="deleteFile(file.name, 'config')">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-list-item>
+          <mat-divider *ngIf="i !== app.configFiles.length-1"></mat-divider>
+        </div>
+      </mat-list>
+
+      <div class="progress" *ngIf="uploadProgressConfig">
+        <mat-chip>
+          {{this.fileUploadingName}}
+          <mat-icon class="cancel-upload" (click)="cancelUpload()">cancel</mat-icon>
+        </mat-chip>
+        <mat-progress-bar class="progress-bar" mode="determinate" [value]="uploadProgressConfig">
+        </mat-progress-bar>
+      </div>
+    </div>
+  </div>
+
+  <button mat-raised-button type="button" class="button configurer bas" [routerLink]="['/config']"
+    [queryParams]="{ id: id}">Configurer
+  </button>
+
+</div>

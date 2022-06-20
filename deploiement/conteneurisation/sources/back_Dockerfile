@@ -1,0 +1,17 @@
+FROM node:lts-alpine3.15
+
+WORKDIR /appli/podman-remote/
+COPY ./packages/podman-remote-static ./podman
+RUN chmod +x podman &&\
+    ./podman system connection add apipodman unix:///run/podman/podman.sock
+
+WORKDIR /appli/backend/server/
+
+RUN npm config set registry https://si-devops-repository.edf.fr/repository/registry.npmjs.org/ &&\
+    npm init --force --yes &&\
+    npm install express body-parser cors express-fileupload mongoose cors read-last-lines --save --verbose &&\
+    npm install -g nodemon --verbose
+
+COPY server.js .
+
+ENTRYPOINT ["nodemon", "server.js"]

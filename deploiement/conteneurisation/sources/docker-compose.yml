@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  front:
+    networks:
+      app_net
+    container_name: conteneurisation_front
+    build:
+      context: .
+      dockerfile: front_Dockerfile
+    image: conteneurisation_front
+    ports:
+      - 4210:80
+    restart: unless-stopped
+  db:
+    networks:
+      app_net
+    container_name: conteneurisation_db
+    image: mongo:5.0.8
+    environment:
+      - MONGO_INITDB_DATABASE=applications
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ../data/db:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+    restart: unless-stopped
+  back:
+    networks:
+      app_net
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+    volumes:
+      - ../data/files:/appli/backend/files
+      - /run/podman/podman.sock:/run/podman/podman.sock
+    container_name: conteneurisation_back
+    build:
+      context: .
+      dockerfile: back_Dockerfile
+    image: conteneurisation_back
+    restart: unless-stopped
+
+networks:
+  app_net:

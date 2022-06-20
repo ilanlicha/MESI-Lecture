@@ -1,0 +1,23 @@
+.container {
+    padding: 10px;
+}
+
+.grid-item {
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 300px;
+    height: auto;
+    margin: 5px;
+}
+
+mat-card{
+    min-width: 310px;
+}
+
+mat-card-title{
+    cursor: pointer;
+}
+
+mat-spinner{
+    margin: 5em auto;
+}

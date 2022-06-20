@@ -1,0 +1,5 @@
+FROM httpd:alpine3.16
+
+WORKDIR /usr/local/apache2/htdocs/
+COPY ./front_files/* .
+COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf

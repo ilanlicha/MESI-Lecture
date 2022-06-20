@@ -1,0 +1,153 @@
+<mat-toolbar color="primary">
+  Configuration : {{ appName }}
+</mat-toolbar>
+
+<mat-spinner *ngIf="!this.appName"></mat-spinner>
+<div class="container main" spellcheck="false" *ngIf="this.appName">
+  <div class="container center" novalidate>
+    <div class="container header">
+      <div>
+        <button mat-raised-button class="button visualiser haut" [routerLink]="['/view']"
+          [queryParams]="{ id: id}">Visualiser</button>
+        <button mat-raised-button color="primary" class="logs" [routerLink]="['/viewlogs']"
+          [queryParams]="{ id: id}">Logs</button>
+      </div>
+      <button mat-raised-button class="button applications" routerLink="/">Applications</button>
+    </div>
+  </div>
+  <form [formGroup]="configForm" (ngSubmit)="edit()">
+    <div class="container body">
+      <div class="items">
+        <h4>Informations :</h4>
+        <mat-form-field class="form-element" appearance="fill">
+          <mat-label>Nom</mat-label>
+          <input matInput placeholder="Nom" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field class="form-element" appearance="fill">
+          <mat-label>INS</mat-label>
+          <input matInput placeholder="INS" formControlName="ins">
+        </mat-form-field>
+
+        <mat-form-field class="form-element" appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Description" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"
+            formControlName="description" autosize></textarea>
+        </mat-form-field>
+
+      </div>
+
+      <mat-divider vertical class="verticaldivider"></mat-divider>
+
+      <div class="items">
+        <h4>Dockerfiles :</h4>
+
+        <mat-tab-group dynamicHeight>
+          <mat-tab label="Front">
+            <mat-form-field class="form-element" appearance="fill">
+              <mat-label>Port</mat-label>
+              <input matInput placeholder="Port" formControlName="portFront" type="number">
+            </mat-form-field>
+            <mat-form-field class="form-element" appearance="fill">
+              <mat-label>Dockerfile</mat-label>
+              <textarea matInput placeholder="Dockerfile" matTextareaAutosize matAutosizeMinRows="2"
+                matAutosizeMaxRows="5" formControlName="frontEnd" autosize></textarea>
+            </mat-form-field>
+          </mat-tab>
+          <mat-tab label="Back">
+            <mat-form-field class="form-element" appearance="fill">
+              <mat-label>Port</mat-label>
+              <input matInput placeholder="Port" formControlName="portBack" type="number">
+            </mat-form-field>
+            <mat-form-field class="form-element" appearance="fill">
+              <mat-label>Dockerfile</mat-label>
+              <textarea matInput placeholder="Dockerfile" matTextareaAutosize matAutosizeMinRows="2"
+                matAutosizeMaxRows="5" formControlName="backEnd" autosize></textarea>
+            </mat-form-field>
+          </mat-tab>
+        </mat-tab-group>
+
+      </div>
+
+      <mat-divider vertical class="verticaldivider"></mat-divider>
+
+      <div class="items">
+        <div>
+          <h4>Fichier(s) source :</h4>
+
+          <mat-form-field>
+            <mat-placeholder>Ajouter un fichier source (ex: backend.tar.gz)</mat-placeholder>
+            <input matInput #sourceFileName>
+            <button matSuffix mat-raised-button color="primary" type="button"
+              (click)="addFile(sourceFileName.value, 'source');sourceFileName.value=''">
+              Ajouter
+            </button>
+          </mat-form-field>
+
+          <mat-list class="form-element">
+            <div *ngIf="sourceFiles.length === 0">
+              <mat-list-item>Pas de fichier</mat-list-item>
+            </div>
+            <div *ngFor="let file of sourceFiles; let i = index">
+              <mat-list-item>
+                <mat-icon>insert_drive_file</mat-icon>
+                {{file.name}}
+                <div style="flex: 1;"></div>
+
+                <button mat-icon-button type="button" (click)="removeFile(file.name, 'source')">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-list-item>
+              <mat-divider *ngIf="i !== sourceFiles.length-1"></mat-divider>
+            </div>
+          </mat-list>
+
+        </div>
+
+        <mat-divider vertical class="verticaldivider"></mat-divider>
+
+        <div>
+          <h4>Fichier(s) de configuration :</h4>
+
+          <mat-form-field>
+            <mat-placeholder>Ajouter un fichier de configuration (ex: httpd.conf)</mat-placeholder>
+            <input matInput #configFileName>
+            <button matSuffix mat-raised-button color="primary" type="button"
+              (click)="addFile(configFileName.value, 'config');configFileName.value=''">
+              Ajouter
+            </button>
+          </mat-form-field>
+
+          <mat-list class="form-element">
+            <div *ngIf="configFiles.length === 0">
+              <mat-list-item>Pas de fichier</mat-list-item>
+            </div>
+            <div *ngFor="let file of configFiles; let i = index">
+              <mat-list-item>
+                <mat-icon>insert_drive_file</mat-icon>
+                {{file.name}}
+                <div style="flex: 1;"></div>
+
+                <button mat-icon-button type="button" (click)="removeFile(file.name, 'config')">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-list-item>
+              <mat-divider *ngIf="i !== configFiles.length-1"></mat-divider>
+            </div>
+          </mat-list>
+        </div>
+      </div>
+
+    </div>
+    <div class="container center" novalidate>
+      <div class="form-element container footer">
+        <button mat-raised-button type="button" class="button" [routerLink]="['/view']"
+          [queryParams]="{ id: id}">Visualiser</button>
+        <button mat-raised-button color="primary" type="submit" class="button"
+          [disabled]="!configForm.valid">Enregistrer</button>
+        <!-- <button mat-raised-button color="danger" type="button" class="button" (click)="delete(id)">Supprimer</button> -->
+        <button mat-raised-button color="danger" type="button" class="button" (click)="openDialog()">Supprimer</button>
+      </div>
+    </div>
+  </form>
+</div>

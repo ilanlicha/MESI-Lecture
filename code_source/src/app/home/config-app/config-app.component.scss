@@ -1,0 +1,80 @@
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.container.main{
+  display: flex;
+  flex-direction: column;
+}
+
+.container.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container.header {
+  width: 40em;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 1em;
+}
+
+.container.body{
+  margin: 1em 1em;
+  display: flex;
+  justify-content:space-between;
+  /* width: max-content; */
+}
+
+.container.footer {
+  width: 40em;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+.items{
+  width: 30%;
+  margin: 1em;
+}
+
+.verticaldivider{
+  margin: 1%;
+}
+
+.form-element {
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.logs{
+  margin-left: 1em;
+}
+
+.button.visualiser.haut {
+  width: 7em;
+  margin-bottom: 1em;
+}
+
+.logs{
+  margin-left: 1em;
+}
+
+.button.applications {
+  width: 8em;
+  margin-bottom: 1em;
+}
+
+mat-form-field.mat-form-field {
+  width: 100%;
+}
+
+mat-spinner{
+  margin: 5em auto;
+}

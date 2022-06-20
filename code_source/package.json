@@ -30,6 +30,7 @@
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.10",
     "ngx-autosize": "^1.8.7",
+    "nodemon": "^2.0.16",
     "prismjs": "^1.28.0",
     "read-last-lines": "^1.8.0",
     "rxjs": "~7.5.0",

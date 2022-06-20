@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-header',
   template: `<mat-toolbar color="primary" class="mat-elevation-z8 top">
-  <mat-icon>dashboard_customize</mat-icon><a class="titre" routerLink="/">Conteneurisation</a>
+  <mat-icon>dashboard_customize</mat-icon><a class="titre" routerLink="/">Livres</a>
   <div class="spacer"></div>
-  <a mat-button routerLink="/">Applications</a>
+  <a mat-button routerLink="/">Livres</a>
   <a mat-raised-button color="link" routerLink="/about">À propos</a>
   <app-theme-switcher style="margin-left: 15px; display:flex;"></app-theme-switcher>
 </mat-toolbar>`,
@@ -14,5 +14,5 @@ import { Component, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -7,35 +7,37 @@ import { catchError, of } from 'rxjs';
 import { HomeService } from '../home.service';
 
 @Component({
-  selector: 'app-new-app',
-  templateUrl: './new-app.component.html',
-  styleUrls: ['./new-app.component.scss']
+  selector: 'app-new-book',
+  templateUrl: './new-book.component.html',
+  styleUrls: ['./new-book.component.scss']
 })
-export class NewAppComponent implements OnInit {
+export class NewBookComponent implements OnInit {
 
   createForm = this.formBuilder.group({
     name: ['', [Validators.required]],
-    ins: ['', [Validators.required]],
-    description: ['']
+    auteur: [''],
+    description: [''],
+    contenu: ['']
   });
 
   constructor(private formBuilder: FormBuilder, private homeService: HomeService,
-    private snackBar: MatSnackBar, private router: Router, private http: HttpClient) {  }
+    private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void { }
 
   create() {
     let name = this.createForm.value.name;
-    let ins = this.createForm.value.ins;
+    let auteur = this.createForm.value.auteur;
     let description = this.createForm.value.description;
+    let contenu = this.createForm.value.contenu;
 
-    this.homeService.create(name, ins, description).pipe(
+    this.homeService.create(name, auteur, description, contenu).pipe(
       catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
     ).subscribe(res => {
       this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);
-      this.homeService.getAppByName(name).subscribe(response => {
-        this.router.navigate(['/config'], { queryParams: { id: response._id } });
-      })
+      // this.homeService.getBookByName(name).subscribe(response => {
+      this.router.navigate(['/']);
+      // })
     });
 
   }

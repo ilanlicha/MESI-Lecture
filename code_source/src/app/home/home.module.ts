@@ -12,11 +12,9 @@ import 'prismjs/components/prism-log';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfigAppComponent } from './config-app/config-app.component';
-import { NewAppComponent } from './new-app/new-app.component';
+import { NewBookComponent } from './new-book/new-book.component';
 import { ViewAppComponent } from './view-app/view-app.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
-import { ViewLogComponent } from './view-log/view-log.component';
-
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
 import { AutosizeModule } from 'ngx-autosize';
@@ -24,7 +22,7 @@ import { AutosizeModule } from 'ngx-autosize';
 const homeModules = [
   DashboardComponent,
   ConfigAppComponent,
-  NewAppComponent,
+  NewBookComponent,
   ViewAppComponent,
   LogHighlightComponent,
   DeleteDialogComponent
@@ -34,7 +32,6 @@ const homeModules = [
   declarations: [
     HomeComponent,
     homeModules,
-    ViewLogComponent,
     DeleteDialogComponent
   ],
   imports: [

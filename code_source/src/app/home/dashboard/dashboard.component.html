@@ -1,48 +1,39 @@
 <mat-toolbar color="primary">
-  Applications
+  Livres
   <div style="flex: 1;"></div>
-  <button mat-raised-button routerLink="/creer">Créer</button>
+  <button mat-raised-button routerLink="/creer">Ajouter</button>
 </mat-toolbar>
 
-<mat-spinner *ngIf="!this.applications"></mat-spinner>
-<div fxLayout="row wrap" class="container" *ngIf="this.applications">
-  <div fxFlex *ngFor="let app of applications">
+<mat-spinner *ngIf="!this.books"></mat-spinner>
+<div fxLayout="row wrap" class="container" *ngIf="this.books">
+  <div fxFlex *ngFor="let livre of books">
     <div class="grid-item" fxLayout="row" fxLayoutAlign="center center">
       <mat-card>
         <mat-card-header>
-          <mat-card-title [routerLink]="['/view']" [queryParams]="{ id: app._id}">{{app.name}}</mat-card-title>
-          <mat-card-subtitle>{{app.ins}}</mat-card-subtitle>
+          <!-- <mat-card-title [routerLink]="['/view']" [queryParams]="{ id: app._id}">{{app.name}}</mat-card-title> -->
+          <mat-card-title>{{livre.name}}</mat-card-title>
+          <mat-card-subtitle>{{livre.auteur}}</mat-card-subtitle>
           <div style="flex: 1;"></div>
           <mat-chip-list>
-            <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip>
-            <mat-chip *ngIf="app.status == 'OFF'" color="danger" selected>{{app.status}}</mat-chip>
-            <mat-chip *ngIf="app.status == 'Chargement'" color="warn" selected>{{app.status}}</mat-chip>
-            <mat-chip *ngIf="app.portFront" matTooltip="Port front">{{app.portFront}}</mat-chip>
-            <mat-chip *ngIf="!app.portFront" matTooltip="Port front">Port manquant</mat-chip>
+            <!-- <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip> -->
           </mat-chip-list>
         </mat-card-header>
         <mat-card-content>
           <p>
-            {{app.description}}
+            {{livre.description}}
           </p>
         </mat-card-content>
 
-        <mat-card-actions *ngIf="app.status == 'ON'">
+        <!-- <mat-card-actions *ngIf="app.status == 'ON'">
           <button mat-raised-button color="danger" (click)="off(app._id)">Eteindre</button>
           <button mat-raised-button color="success" (click)="acceder(app._id)">Accéder</button>
-          <button mat-raised-button color="primary" [routerLink]="['/viewlogs']" [queryParams]="{ id: app._id}">Logs</button>
-          <button mat-icon-button [routerLink]="['/config']" [queryParams]="{ id: app._id}"><mat-icon>edit</mat-icon></button>
-        </mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/viewlogs']"
+            [queryParams]="{ id: app._id}">Logs</button>
+          <button mat-icon-button [routerLink]="['/config']" [queryParams]="{ id: app._id}">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-card-actions> -->
 
-        <mat-card-actions *ngIf="app.status == 'OFF'">
-          <button mat-raised-button color="primary" (click)="on(app._id)">Lancer</button>
-          <button mat-raised-button color="primary" [routerLink]="['/viewlogs']" [queryParams]="{ id: app._id}">Logs</button>
-          <button mat-icon-button [routerLink]="['/config']" [queryParams]="{ id: app._id}"><mat-icon>edit</mat-icon></button>
-        </mat-card-actions>
-
-        <mat-card-actions *ngIf="app.status == 'Chargement'">
-          <button mat-raised-button disabled>...</button>
-        </mat-card-actions>
       </mat-card>
     </div>
   </div>

@@ -10,13 +10,13 @@ import { Component, OnInit } from '@angular/core';
   <mat-grid-tile>
       <mat-card>
           <mat-card-subtitle>A propos</mat-card-subtitle>
-          <mat-card-title>conteneurisation</mat-card-title>
+          <mat-card-title>Livres</mat-card-title>
           <mat-card-content>
-              <p>Lancer une application conteneurisée</p>
+              <p>Lire un livre mot par mot</p>
           </mat-card-content>
           <mat-divider inset></mat-divider>
           <mat-card-actions>
-              <a routerLink="/" mat-raised-button color="primary">APPLICATIONS</a>
+              <a routerLink="/" mat-raised-button color="primary">LIVRES</a>
           </mat-card-actions>
           <mat-card-footer>
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -28,5 +28,5 @@ import { Component, OnInit } from '@angular/core';
 export class AboutComponent implements OnInit {
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

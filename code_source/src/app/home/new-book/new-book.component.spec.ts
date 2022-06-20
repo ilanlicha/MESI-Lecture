@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewLogComponent } from './view-log.component';
+import { NewBookComponent } from './new-book.component';
 
-describe('ViewLogComponent', () => {
-  let component: ViewLogComponent;
-  let fixture: ComponentFixture<ViewLogComponent>;
+describe('FormulaireComponent', () => {
+  let component: NewBookComponent;
+  let fixture: ComponentFixture<NewBookComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewLogComponent ]
+      declarations: [NewBookComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewLogComponent);
+    fixture = TestBed.createComponent(NewBookComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

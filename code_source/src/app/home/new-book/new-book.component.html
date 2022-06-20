@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  Créer une application
+  Ajouter un livre
 </mat-toolbar>
 
 <div class="container main">
@@ -17,14 +17,20 @@
         </mat-form-field>
 
         <mat-form-field class="form-element" appearance="fill">
-          <mat-label>INS</mat-label>
-          <input matInput placeholder="INS" formControlName="ins">
+          <mat-label>Auteur</mat-label>
+          <input matInput placeholder="Auteur" formControlName="auteur">
         </mat-form-field>
 
         <mat-form-field class="form-element" appearance="fill">
           <mat-label>Description</mat-label>
           <textarea matInput placeholder="Description" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"
             formControlName="description"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="form-element" appearance="fill">
+          <mat-label>Contenu</mat-label>
+          <textarea matInput placeholder="Contenu" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"
+            formControlName="contenu"></textarea>
         </mat-form-field>
       </div>
 

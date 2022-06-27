@@ -34,7 +34,7 @@ export class NewBookComponent implements OnInit {
     let description = this.createForm.value.description;
     let contenu = this.createForm.value.contenu;
 
-    this.homeService.create(name, auteur, description, contenu, this.couverture).pipe(
+    this.homeService.create(name, auteur, description, contenu, this.couverture === undefined ? null : this.couverture).pipe(
       catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
     ).subscribe(res => {
       this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);

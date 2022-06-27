@@ -2,21 +2,56 @@
   Lecture : {{ this.name }}
 </mat-toolbar>
 
-<mat-spinner *ngIf="!this.contenu"></mat-spinner>
+<mat-spinner *ngIf="!book"></mat-spinner>
 
-<div class="container">
+<div class="container" *ngIf="book">
+
+  <mat-expansion-panel hideToggle class="details">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{book.name}}
+        <mat-chip-list class="detailsauteur">
+          <mat-chip color="none" selected>{{book.auteur}}</mat-chip>
+        </mat-chip-list>
+      </mat-panel-title>
+      <mat-panel-description>
+        Cliquer pour étendre
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-grid-list cols="4" rowHeight="100px">
+      <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
+        <div *ngIf="tile.index === 1">
+          <p class="detailsdescription">{{tile.text}}</p>
+        </div>
+        <div *ngIf="tile.index === 2">
+          <img class="image" [src]="couverture(book.couvertureData)">
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-expansion-panel>
+
+
   <div>
-    <button mat-mini-fab color="primary" (click)="pause()" class="buttons">
+    <button (keydown.space)="$event.preventDefault();" mat-mini-fab color="primary" (click)="pause()" class="buttons"
+      matTooltip="Pause" matTooltipPosition="above">
       <mat-icon>pause</mat-icon>
     </button>
-    <button mat-mini-fab color="primary" (click)="start()" class="buttons">
+    <button (keydown.space)="$event.preventDefault();" mat-mini-fab color="primary" (click)="start()" class="buttons"
+      matTooltip="Reprendre" matTooltipPosition="above">
       <mat-icon>play_arrow</mat-icon>
     </button>
 
-    <mat-slider aria-label="unit(s)" min="0" max="2" step="1" (input)="onInputChange($event)"></mat-slider>
+    <mat-slider aria-label="unit(s)" min="0" max="2" step="1" (input)="onInputChange($event)" class="slider"
+      matTooltip="Vitesse de lecture" matTooltipPosition="above">
+    </mat-slider>
+
+    <button (keydown.space)="$event.preventDefault();" mat-mini-fab color="primary" (click)="reset()" class="buttons"
+      matTooltip="Recommencer" matTooltipPosition="above">
+      <mat-icon>restart_alt</mat-icon>
+    </button>
   </div>
 
   <mat-chip-list class="motcontainer">
-    <mat-chip class="mot" color="none" selected>{{this.mot}}</mat-chip>
+    <mat-chip class="mot" color="none" selected>{{mot}}</mat-chip>
   </mat-chip-list>
 </div>

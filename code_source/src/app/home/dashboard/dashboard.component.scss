@@ -10,14 +10,23 @@
     margin: 5px;
 }
 
-mat-card{
+mat-card {
     min-width: 310px;
+    max-width: 20em;
 }
 
-mat-card-title{
-    cursor: pointer;
-}
-
-mat-spinner{
+mat-spinner {
     margin: 5em auto;
+}
+
+.image {
+    width: 22em;
+}
+
+.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }

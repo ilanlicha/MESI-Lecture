@@ -8,14 +8,14 @@
 <div fxLayout="row wrap" class="container" *ngIf="this.books">
   <div fxFlex *ngFor="let book of books">
     <div class="grid-item" fxLayout="row" fxLayoutAlign="center center">
-      <mat-card>
+      <!-- <mat-card>
         <mat-card-header>
           <mat-card-title [routerLink]="['/read']" [queryParams]="{ name: book.name}">{{book.name}}</mat-card-title>
-          <!-- <mat-card-title>{{book.name}}</mat-card-title> -->
+          <mat-card-title>{{book.name}}</mat-card-title>
           <mat-card-subtitle>{{book.auteur}}</mat-card-subtitle>
           <div style="flex: 1;"></div>
           <mat-chip-list>
-            <!-- <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip> -->
+            <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip>
           </mat-chip-list>
         </mat-card-header>
         <mat-card-content>
@@ -23,10 +23,11 @@
             {{book.description}}
           </p>
 
-          <img [src]="sanitize('data:image/jpg;base64, ' + couverture(book.couvertureData))">
+          <img [src]="couverture(book.couvertureData)">
         </mat-card-content>
 
-        <!-- <mat-card-actions *ngIf="app.status == 'ON'">
+        
+        <mat-card-actions *ngIf="app.status == 'ON'">
           <button mat-raised-button color="danger" (click)="off(app._id)">Eteindre</button>
           <button mat-raised-button color="success" (click)="acceder(app._id)">Accéder</button>
           <button mat-raised-button color="primary" [routerLink]="['/viewlogs']"
@@ -34,8 +35,25 @@
           <button mat-icon-button [routerLink]="['/config']" [queryParams]="{ id: app._id}">
             <mat-icon>edit</mat-icon>
           </button>
-        </mat-card-actions> -->
+        </mat-card-actions>
 
+      </mat-card> -->
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{book.name}}</mat-card-title>
+          <mat-card-subtitle>{{book.auteur}}</mat-card-subtitle>
+        </mat-card-header>
+        <img class="image" [src]="couverture(book.couvertureData)">
+        <mat-card-content>
+          <p class="description">
+            {{book.description}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button [routerLink]="['/read']" [queryParams]="{ name: book.name}">Lire</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
       </mat-card>
     </div>
   </div>

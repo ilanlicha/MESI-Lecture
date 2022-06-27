@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../interfaces';
 import { HomeService } from '../home.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Buffer } from 'buffer';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -24,19 +26,10 @@ export class DashboardComponent implements OnInit {
   }
 
   couverture(buffer: Buffer) {
-    var binary = '';
-    var bytes = new Uint8Array(buffer.length);
-    var len = bytes.byteLength;
-    console.log(buffer[0]);
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
+    return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,'
+      + Buffer.from(buffer).toString('base64'));
   }
 
-  sanitize(url: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-  }
   // changeStatus(id: string, status: string){
   //   for (let i = 0; i < this.applications.length; i++) {
   //     if (this.applications[i]._id === id) {

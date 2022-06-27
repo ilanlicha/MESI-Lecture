@@ -23,7 +23,6 @@ app.use(upload())
 // Initialise le serveur
 var server = app.listen(process.env.PORT || 8081, '0.0.0.0', function () {
     var port = server.address().port;
-    console.log("L'application est lancée sur le port", port);
 });
 
 // Préparer la base de données MongoDB
@@ -71,14 +70,7 @@ app.get('/api/content', (req, res) => {
 
 // POST
 
-app.post('/api/create', (req, res) => {
-    var name = req.body.name;
-    var auteur = req.body.auteur;
-    var description = req.body.description;
-    var contenu = req.body.contenu;
-    var couverture = req.files.couverture;
-    var couvertureData = couverture.data;
-
+function create(name, auteur, description, contenu, couvertureData, res) {
     livre.find({ name: name }, function (err, docs) {
         if (docs.length) {
             res.status(409).json({
@@ -114,4 +106,21 @@ app.post('/api/create', (req, res) => {
             }
         }
     });
+}
+
+app.post('/api/create', (req, res) => {
+    var name = req.body.name;
+    var auteur = req.body.auteur;
+    var description = req.body.description;
+    var contenu = req.body.contenu;
+
+    var couvertureData;
+    if (req.body.image === "oui") {
+        couvertureData = req.files.couverture.data;
+        create(name, auteur, description, contenu, couvertureData, res);
+    } else
+        fs.readFile("./books/default/default.jpg", (err, data) => {
+            couvertureData = data;
+            create(name, auteur, description, contenu, couvertureData, res);
+        });
 });

@@ -1,8 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HomeService } from '../home.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Buffer } from 'buffer';
 import { MatSliderChange } from '@angular/material/slider';
+import { Book } from '../interfaces';
+import { DomSanitizer } from '@angular/platform-browser';
+
+export interface Tile {
+  cols: number;
+  rows: number;
+  text: string;
+  index: number;
+}
+
 @Component({
   selector: 'app-read-book',
   templateUrl: './read-book.component.html',
@@ -11,6 +21,7 @@ import { MatSliderChange } from '@angular/material/slider';
 export class ReadBookComponent implements OnInit {
 
   name!: string;
+  book!: Book;
   contenu!: string[];
   mot!: string;
   index: number = 0;
@@ -19,13 +30,22 @@ export class ReadBookComponent implements OnInit {
   intervalId = 0;
   intervalStarted: boolean = false;
 
-  constructor(private route: ActivatedRoute, private homeService: HomeService, private snackBar: MatSnackBar) {
+  tiles!: Tile[];
+  constructor(private route: ActivatedRoute, private homeService: HomeService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.name = params['name'];
     })
+
+    this.homeService.getBookByName(this.name).subscribe(book => {
+      this.book = book;
+      this.tiles = [
+        { text: this.book.description, cols: 3, rows: 2, index: 1 },
+        { text: 'Image', cols: 1, rows: 2, index: 2 }
+      ];
+    });
 
     this.homeService.getContent(this.name).subscribe(content => {
       this.contenu = content.message.split(' ');
@@ -57,6 +77,12 @@ export class ReadBookComponent implements OnInit {
     }
   }
 
+  reset() {
+    this.index = 0;
+    this.mot = this.contenu[this.index];
+    this.pause();
+  }
+
   onInputChange(event: MatSliderChange) {
     switch (event.value) {
       case 0:
@@ -64,7 +90,7 @@ export class ReadBookComponent implements OnInit {
         this.restart();
         break;
       case 1:
-        this.speed = 300;
+        this.speed = 350;
         this.restart();
         break;
       case 2:
@@ -72,5 +98,43 @@ export class ReadBookComponent implements OnInit {
         this.restart();
         break;
     }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    switch (event.key) {
+      case ' ':
+        this.intervalStarted === true ? this.pause() : this.start();
+        break;
+      case 'ArrowRight':
+        switch (this.speed) {
+          case 500:
+            this.speed = 350;
+            this.restart();
+            break;
+          case 350:
+            this.speed = 200;
+            this.restart();
+            break;
+        }
+        break;
+      case 'ArrowLeft':
+        switch (this.speed) {
+          case 200:
+            this.speed = 350;
+            this.restart();
+            break;
+          case 350:
+            this.speed = 500;
+            this.restart();
+            break;
+        }
+        break;
+    }
+  }
+
+  couverture(buffer: Buffer) {
+    return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,'
+      + Buffer.from(buffer).toString('base64'));
   }
 }

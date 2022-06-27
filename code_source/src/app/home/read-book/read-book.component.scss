@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: auto;
   margin-top: 3em;
+  width: 80em;
 }
 
 .mot {
@@ -11,7 +13,7 @@
   text-align: center;
   height: 1.2em;
   font-size: 8em;
-  width: 6em;
+  width: 10em;
 }
 
 .motcontainer {
@@ -24,4 +26,29 @@
 
 .buttons {
   margin-right: 1em;
+}
+
+.slider {
+  margin-right: .8em;
+}
+
+.details {
+  margin-bottom: 20px;
+  width: 80em;
+}
+
+.detailsauteur {
+  margin-left: 10px;
+}
+
+.image {
+  width: 120px
+}
+
+.detailsdescription {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  -webkit-box-orient: vertical;
 }

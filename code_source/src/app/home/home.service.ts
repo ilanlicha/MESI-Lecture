@@ -28,7 +28,7 @@ export class HomeService {
   }
   // POST
 
-  create(name: string, auteur: string, description: string, contenu: string, couverture: File): Observable<ApiResponse> {
+  create(name: string, auteur: string, description: string, contenu: string, couverture: File | null): Observable<ApiResponse> {
 
     const formData = new FormData();
 
@@ -36,7 +36,12 @@ export class HomeService {
     formData.append("auteur", auteur);
     formData.append("description", description);
     formData.append("contenu", contenu);
-    formData.append("couverture", couverture);
+    if (couverture === null)
+      formData.append("image", "non");
+    else {
+      formData.append("image", "oui");
+      formData.append("couverture", couverture)
+    }
 
     return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", formData);
 

@@ -27,10 +27,17 @@ export interface ApiFilesResponse {
     files: Files[]
 }
 
+
+
+
 export interface Book {
     _id: string;
     name: string;
     auteur: string;
     description: string;
-    contenu: string;
+    couvertureData: Buffer;
+}
+
+export interface Content {
+    content: string;
 }

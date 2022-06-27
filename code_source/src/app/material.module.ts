@@ -15,12 +15,12 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import {MatStepperModule} from '@angular/material/stepper';
-import {MatListModule} from '@angular/material/list'; 
-import {MatTabsModule} from '@angular/material/tabs'; 
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
-import {MatDialogModule} from '@angular/material/dialog'; 
-import {MatTooltipModule} from '@angular/material/tooltip'; 
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const materialModules = [
   MatButtonModule,

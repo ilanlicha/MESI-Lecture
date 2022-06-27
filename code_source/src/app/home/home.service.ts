@@ -1,7 +1,7 @@
 import { HttpClient, HttpEvent, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Book, ApiResponse, ApiFilesResponse } from './interfaces';
+import { Book, ApiResponse, ApiFilesResponse, Content } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,28 @@ export class HomeService {
     return this.httpClient.get<Book>(this.baseUrl + "/book", { params: params });
   }
 
+  getContent(name: string): Observable<ApiResponse> {
+    let params = new HttpParams().set("name", name);
+    return this.httpClient.get<ApiResponse>(this.baseUrl + "/content", { params: params });
+  }
   // POST
 
-  create(name: string, auteur: string, description: string, contenu: string): Observable<ApiResponse> {
-    return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", {
-      name: name, auteur: auteur, description: description, contenu: contenu
-    });
+  create(name: string, auteur: string, description: string, contenu: string, couverture: File): Observable<ApiResponse> {
+
+    const formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("auteur", auteur);
+    formData.append("description", description);
+    formData.append("contenu", contenu);
+    formData.append("couverture", couverture);
+
+    return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", formData);
+
+
+    // return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", {
+    //   name: name, auteur: auteur, description: description, contenu: contenu, couverture: couverture
+    // });
   }
 
   // PUT

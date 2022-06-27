@@ -33,8 +33,7 @@ mongoose.connect('mongodb://localhost:27017/livre');
 
 mongoose.model('livre',
     new Schema({
-        name: String, auteur: String, description: String,
-        date: String, contenu: String
+        name: String, auteur: String, description: String, couvertureData: Buffer
     }, {
         versionKey: false
     }),
@@ -57,10 +56,29 @@ app.get('/api/book', (req, res) => {
     }
 });
 
+app.get('/api/content', (req, res) => {
+    let name = req.query.name;
+    var dir = "./books/" + name + "/" + name + ".txt";
+
+    fs.readFile(dir, (err, data) => {
+        res.status(200).json({
+            message: data.toString(),
+            status: 200
+        });
+    });
+});
+
+
 // POST
 
 app.post('/api/create', (req, res) => {
-    const { name, auteur, description, contenu } = req.body;
+    var name = req.body.name;
+    var auteur = req.body.auteur;
+    var description = req.body.description;
+    var contenu = req.body.contenu;
+    var couverture = req.files.couverture;
+    var couvertureData = couverture.data;
+
     livre.find({ name: name }, function (err, docs) {
         if (docs.length) {
             res.status(409).json({
@@ -73,7 +91,16 @@ app.post('/api/create', (req, res) => {
                     name,
                     auteur,
                     description,
-                    contenu
+                    couvertureData
+                });
+                var dir = "./books/" + name + "/";
+
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir, { recursive: true });
+                }
+
+                fs.writeFile(dir + name + ".txt", contenu, function (err) {
+                    if (err) throw err;
                 });
                 res.status(201).json({
                     message: 'Livre créé',

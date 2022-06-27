@@ -13,7 +13,7 @@ import 'prismjs/components/prism-log';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfigAppComponent } from './config-app/config-app.component';
 import { NewBookComponent } from './new-book/new-book.component';
-import { ViewAppComponent } from './view-app/view-app.component';
+import { ReadBookComponent } from './read-book/read-book.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
@@ -23,7 +23,7 @@ const homeModules = [
   DashboardComponent,
   ConfigAppComponent,
   NewBookComponent,
-  ViewAppComponent,
+  ReadBookComponent,
   LogHighlightComponent,
   DeleteDialogComponent
 ]

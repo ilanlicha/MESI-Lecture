@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3em;
+}
+
+.mot {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 1.2em;
+  font-size: 8em;
+  width: 6em;
+}
+
+.motcontainer {
+  margin-top: 1em;
+}
+
+.mat-chip.mat-standard-chip::after {
+  background: #0000;
+}
+
+.buttons {
+  margin-right: 1em;
+}

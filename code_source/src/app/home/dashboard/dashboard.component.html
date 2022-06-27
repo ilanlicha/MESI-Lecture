@@ -6,13 +6,13 @@
 
 <mat-spinner *ngIf="!this.books"></mat-spinner>
 <div fxLayout="row wrap" class="container" *ngIf="this.books">
-  <div fxFlex *ngFor="let livre of books">
+  <div fxFlex *ngFor="let book of books">
     <div class="grid-item" fxLayout="row" fxLayoutAlign="center center">
       <mat-card>
         <mat-card-header>
-          <!-- <mat-card-title [routerLink]="['/view']" [queryParams]="{ id: app._id}">{{app.name}}</mat-card-title> -->
-          <mat-card-title>{{livre.name}}</mat-card-title>
-          <mat-card-subtitle>{{livre.auteur}}</mat-card-subtitle>
+          <mat-card-title [routerLink]="['/read']" [queryParams]="{ name: book.name}">{{book.name}}</mat-card-title>
+          <!-- <mat-card-title>{{book.name}}</mat-card-title> -->
+          <mat-card-subtitle>{{book.auteur}}</mat-card-subtitle>
           <div style="flex: 1;"></div>
           <mat-chip-list>
             <!-- <mat-chip *ngIf="app.status == 'ON'" color="success" selected>{{app.status}}</mat-chip> -->
@@ -20,8 +20,10 @@
         </mat-card-header>
         <mat-card-content>
           <p>
-            {{livre.description}}
+            {{book.description}}
           </p>
+
+          <img [src]="sanitize('data:image/jpg;base64, ' + couverture(book.couvertureData))">
         </mat-card-content>
 
         <!-- <mat-card-actions *ngIf="app.status == 'ON'">

@@ -1,0 +1,22 @@
+<mat-toolbar color="primary">
+  Lecture : {{ this.name }}
+</mat-toolbar>
+
+<mat-spinner *ngIf="!this.contenu"></mat-spinner>
+
+<div class="container">
+  <div>
+    <button mat-mini-fab color="primary" (click)="pause()" class="buttons">
+      <mat-icon>pause</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" (click)="start()" class="buttons">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+
+    <mat-slider aria-label="unit(s)" min="0" max="2" step="1" (input)="onInputChange($event)"></mat-slider>
+  </div>
+
+  <mat-chip-list class="motcontainer">
+    <mat-chip class="mot" color="none" selected>{{this.mot}}</mat-chip>
+  </mat-chip-list>
+</div>

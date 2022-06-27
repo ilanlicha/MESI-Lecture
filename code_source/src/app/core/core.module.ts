@@ -25,7 +25,6 @@ const coreModules = [
   imports: [
     CommonModule,
     CoreRoutingModule,
-    // coreModules,
     MaterialModule
   ],
   exports: [

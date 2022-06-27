@@ -1,4 +1,3 @@
-import { HttpClient, } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,12 +12,16 @@ import { HomeService } from '../home.service';
 })
 export class NewBookComponent implements OnInit {
 
+  url!: any;
+
   createForm = this.formBuilder.group({
     name: ['', [Validators.required]],
     auteur: [''],
     description: [''],
     contenu: ['']
   });
+
+  couverture!: File;
 
   constructor(private formBuilder: FormBuilder, private homeService: HomeService,
     private snackBar: MatSnackBar, private router: Router) { }
@@ -31,15 +34,12 @@ export class NewBookComponent implements OnInit {
     let description = this.createForm.value.description;
     let contenu = this.createForm.value.contenu;
 
-    this.homeService.create(name, auteur, description, contenu).pipe(
+    this.homeService.create(name, auteur, description, contenu, this.couverture).pipe(
       catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
     ).subscribe(res => {
       this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);
-      // this.homeService.getBookByName(name).subscribe(response => {
       this.router.navigate(['/']);
-      // })
     });
-
   }
 
   openSnackBar(message: string, status: number) {
@@ -53,4 +53,29 @@ export class NewBookComponent implements OnInit {
     });
   }
 
+  onDragOver(event: any) {
+    event.preventDefault();
+  }
+
+  onDropSuccess(event: any) {
+    this.save(event.dataTransfer.files[0]);
+    event.preventDefault();
+  }
+
+  preUpload(event: any) {
+    this.save(event.target.files[0]);
+  }
+
+  save(file: File) {
+    if (file.type.includes('jpeg') || file.type.includes('png')) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (_event) => {
+        this.url = reader.result;
+      }
+      this.couverture = file;
+    } else {
+      this.openSnackBar("Le fichier n'est pas une image !", 400);
+    }
+  }
 }

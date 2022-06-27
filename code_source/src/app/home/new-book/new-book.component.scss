@@ -2,7 +2,7 @@
   flex: 1 1 auto;
 }
 
-.container.main{
+.container.main {
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -39,4 +39,16 @@
 
 mat-form-field.mat-form-field {
   width: 100%;
+}
+
+.file-input {
+  display: none;
+}
+
+.image {
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 98%;
 }

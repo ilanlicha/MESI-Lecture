@@ -34,6 +34,22 @@
         </mat-form-field>
       </div>
 
+      <div (dragover)="onDragOver($event);dragZone.style.background='rgb(70,70,70)';"
+        (dragleave)="dragZone.style.background='transparent';"
+        (drop)="onDropSuccess($event);dragZone.style.background='transparent';" #dragZone>
+        <mat-list-item>
+          <input type="file" class="file-input" (change)="preUpload($event)" #configFileUpload>
+          <div>
+            Couverture
+            <button mat-icon-button color="primary" class="upload-btn" (click)="configFileUpload.click()" type="button">
+              <mat-icon>upload_file</mat-icon>
+            </button>
+          </div>
+
+        </mat-list-item>
+      </div>
+      <img *ngIf="this.url" src="{{this.url}}" class="image">
+
       <div class="form-element">
         <button mat-raised-button color="primary" type="submit" class="button" [disabled]="!createForm.valid">Créer
         </button>

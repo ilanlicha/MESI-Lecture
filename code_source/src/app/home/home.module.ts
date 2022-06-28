@@ -15,6 +15,7 @@ import { ConfigAppComponent } from './config-app/config-app.component';
 import { NewBookComponent } from './new-book/new-book.component';
 import { ReadBookComponent } from './read-book/read-book.component';
 import { BookDetailsDialogComponent } from './book-details-dialog/book-details-dialog.component';
+import { DialogLectureFinie } from './read-book/read-book.component';
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
 import { AutosizeModule } from 'ngx-autosize';
@@ -25,7 +26,8 @@ const homeModules = [
   NewBookComponent,
   ReadBookComponent,
   LogHighlightComponent,
-  BookDetailsDialogComponent
+  BookDetailsDialogComponent,
+  DialogLectureFinie
 ]
 
 @NgModule({

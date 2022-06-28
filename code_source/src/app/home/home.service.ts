@@ -17,6 +17,11 @@ export class HomeService {
     return this.httpClient.get<Book[]>(this.baseUrl + "/book");
   }
 
+  getBookById(id: string): Observable<Book> {
+    let params = new HttpParams().set("id", id);
+    return this.httpClient.get<Book>(this.baseUrl + "/book", { params: params });
+  }
+
   getBookByName(name: string): Observable<Book> {
     let params = new HttpParams().set("name", name);
     return this.httpClient.get<Book>(this.baseUrl + "/book", { params: params });
@@ -52,6 +57,12 @@ export class HomeService {
   }
 
   // PUT
+
+  updateReadIndex(id: string, lectureIndex: number) {
+    return this.httpClient.put(this.baseUrl + "/readindex", {
+      id: id, lectureIndex: lectureIndex
+    });
+  }
 
   // DELETE
 

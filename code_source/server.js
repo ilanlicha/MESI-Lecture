@@ -32,7 +32,8 @@ mongoose.connect('mongodb://localhost:27017/livre');
 
 mongoose.model('livre',
     new Schema({
-        name: String, auteur: String, description: String, couvertureData: Buffer
+        name: String, auteur: String, description: String, couvertureData: Buffer,
+        lectureIndex: Number
     }, {
         versionKey: false
     }),
@@ -83,7 +84,8 @@ function create(name, auteur, description, contenu, couvertureData, res) {
                     name,
                     auteur,
                     description,
-                    couvertureData
+                    couvertureData,
+                    lectureIndex: 0
                 });
                 var dir = "./books/" + name + "/";
 
@@ -123,4 +125,9 @@ app.post('/api/create', (req, res) => {
             couvertureData = data;
             create(name, auteur, description, contenu, couvertureData, res);
         });
+});
+
+app.put('/api/readindex', (req, res) => {
+    const { id, lectureIndex } = req.body;
+    livre.findByIdAndUpdate({ _id: id }, { lectureIndex: lectureIndex }, function (err, obj) { });
 });

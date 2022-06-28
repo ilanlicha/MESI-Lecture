@@ -19,5 +19,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>
-  <button mat-button mat-dialog-close [routerLink]="['/read']" [queryParams]="{ name: book.name}">Lire</button>
+  <button mat-button mat-dialog-close [routerLink]="['/read']" [queryParams]="{ id: book._id}">Lire</button>
 </div>

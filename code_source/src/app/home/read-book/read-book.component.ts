@@ -1,10 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { HomeService } from '../home.service';
 import { Buffer } from 'buffer';
 import { MatSliderChange } from '@angular/material/slider';
 import { Book } from '../interfaces';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface Tile {
   cols: number;
@@ -20,36 +21,45 @@ export interface Tile {
 })
 export class ReadBookComponent implements OnInit {
 
-  name!: string;
+  id!: string;
   book!: Book;
   contenu!: string[];
   mot!: string;
-  index: number = 0;
+  index!: number;
+  tmpIndex!: number;
   speed: number = 500;
 
   intervalId = 0;
   intervalStarted: boolean = false;
 
   tiles!: Tile[];
-  constructor(private route: ActivatedRoute, private homeService: HomeService, private sanitizer: DomSanitizer) {
+  constructor(private route: ActivatedRoute, private homeService: HomeService, private sanitizer: DomSanitizer, private router: Router
+    , public dialog: MatDialog) {
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        this.updateIndex();
+      }
+    });
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.name = params['name'];
+      this.id = params['id'];
     })
 
-    this.homeService.getBookByName(this.name).subscribe(book => {
+    this.homeService.getBookById(this.id).subscribe(book => {
       this.book = book;
+      this.index = book.lectureIndex;
+      this.tmpIndex = book.lectureIndex;
       this.tiles = [
         { text: this.book.description, cols: 3, rows: 2, index: 1 },
         { text: 'Image', cols: 1, rows: 2, index: 2 }
       ];
-    });
 
-    this.homeService.getContent(this.name).subscribe(content => {
-      this.contenu = content.message.split(' ');
-      this.mot = this.contenu[this.index];
+      this.homeService.getContent(this.book.name).subscribe(content => {
+        this.contenu = content.message.split(' ');
+        this.mot = this.contenu[this.index];
+      });
     });
   }
 
@@ -58,7 +68,12 @@ export class ReadBookComponent implements OnInit {
       this.intervalStarted = true;
       this.intervalId = window.setInterval(() => {
         this.mot = this.contenu[this.index];
-        this.index == this.contenu.length - 1 ? this.index = 0 : this.index++;
+        if (this.index === this.contenu.length - 1) {
+          this.reset();
+          this.dialog.open(DialogLectureFinie);
+        }
+        else
+          this.index++;
       }, this.speed);
     }
   }
@@ -137,4 +152,23 @@ export class ReadBookComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,'
       + Buffer.from(buffer).toString('base64'));
   }
+
+  updateIndex() {
+    if (this.index !== this.tmpIndex)
+      this.homeService.updateReadIndex(this.book._id, this.index === 0 ? this.index : this.index - 1).subscribe();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canLeavePage($event: any) {
+    this.updateIndex();
+  }
 }
+
+@Component({
+  selector: 'dialogLectureFinie',
+  template: `Lecture terminée
+  <div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>`,
+})
+export class DialogLectureFinie { }

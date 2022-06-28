@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="header">
+    {{book.name}}
+    <mat-chip-list class="auteur">
+      <mat-chip color="none" selected>{{book.auteur}}</mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <mat-grid-list cols="4" rowHeight="100px">
+    <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
+      <div *ngIf="tile.index === 1">
+        <p class="detailsdescription">{{tile.text}}</p>
+      </div>
+      <div *ngIf="tile.index === 2">
+        <img class="image" [src]="couverture(book.couvertureData)">
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button mat-dialog-close [routerLink]="['/read']" [queryParams]="{ name: book.name}">Lire</button>
+</div>

@@ -3,6 +3,8 @@ import { Book } from '../interfaces';
 import { HomeService } from '../home.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Buffer } from 'buffer';
+import { MatDialog } from '@angular/material/dialog';
+import { BookDetailsDialogComponent } from '../book-details-dialog/book-details-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +15,7 @@ export class DashboardComponent implements OnInit {
 
   books!: Book[];
 
-  constructor(private homeService: HomeService, private sanitizer: DomSanitizer) { }
+  constructor(private homeService: HomeService, private sanitizer: DomSanitizer, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getBooks();
@@ -28,6 +30,14 @@ export class DashboardComponent implements OnInit {
   couverture(buffer: Buffer) {
     return this.sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,'
       + Buffer.from(buffer).toString('base64'));
+  }
+
+    openDialog(book: Book) {
+    const dialogRef = this.dialog.open(BookDetailsDialogComponent, {
+      data: {
+        book: book
+      }
+    });
   }
 
   // changeStatus(id: string, status: string){

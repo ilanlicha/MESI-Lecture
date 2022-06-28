@@ -14,7 +14,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfigAppComponent } from './config-app/config-app.component';
 import { NewBookComponent } from './new-book/new-book.component';
 import { ReadBookComponent } from './read-book/read-book.component';
-import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { BookDetailsDialogComponent } from './book-details-dialog/book-details-dialog.component';
 import { HomeService } from './home.service';
 import { HomeComponent } from './home.component';
 import { AutosizeModule } from 'ngx-autosize';
@@ -25,14 +25,14 @@ const homeModules = [
   NewBookComponent,
   ReadBookComponent,
   LogHighlightComponent,
-  DeleteDialogComponent
+  BookDetailsDialogComponent
 ]
 
 @NgModule({
   declarations: [
     HomeComponent,
     homeModules,
-    DeleteDialogComponent
+    BookDetailsDialogComponent
   ],
   imports: [
     ReactiveFormsModule,

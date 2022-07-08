@@ -1,32 +1,73 @@
 .container {
-    padding: 10px;
+    padding-top: 23px;
+    width: 78em;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
 }
 
-.grid-item {
-    border-radius: 5px;
-    padding: 10px;
-    min-width: 300px;
-    height: auto;
-    margin: 5px;
+.container-items {
+    max-width: 140px;
+    margin-left: 15px;
+    margin-bottom: 15px;
 }
 
-mat-card {
-    min-width: 310px;
-    max-width: 20em;
+.container-items:hover .images {
+    -webkit-filter: brightness(70%);
+}
+
+.container-images {
+    position: relative;
+    height: 220px;
+}
+
+.container-images .images {
+    max-width: 140px;
+    max-height: 220px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.images:hover {
+    cursor: pointer;
+}
+
+.book-title {
+    font-family: 'Trebuchet MS';
+    font-size: 14px;
+}
+
+.book-title-div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: auto;
+}
+
+.book-auteur {
+    margin-top: -18px;
+    font-family: 'Trebuchet MS';
+    font-size: 14px;
+}
+
+.afficher-button {
+    margin-top: 20px;
+    width: 100%;
 }
 
 mat-spinner {
     margin: 5em auto;
 }
 
-.image {
-    width: 22em;
+.headerContainer {
+    display: flex;
+    margin: auto;
+    width: 55em;
 }
 
-.description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+mat-card-title-group {
+    display: flex;
+    flex-direction: column;
 }

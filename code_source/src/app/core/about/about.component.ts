@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-about',
+  styleUrls: ['./about.component.scss'],
   template: `<mat-toolbar color="primary">
+  <div class="headerContainer">
   À propos
+  </div>
 </mat-toolbar>
 
 <mat-grid-list cols="1" rows="1" rowHeight="3:1">

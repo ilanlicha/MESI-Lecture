@@ -5,10 +5,10 @@
 
 // Define the light theme
 $light-primary: mat-palette($mat-indigo);
-$light-accent:  mat-palette($mat-pink);
-$light-warn:    mat-palette($mat-deep-orange);
+$light-accent: mat-palette($mat-pink);
+$light-warn: mat-palette($mat-deep-orange);
 $light-success: mat-palette($mat-green);
-$light-theme:   mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
 // Include the light theme styles.
 @include angular-material-theme($light-theme);
@@ -16,17 +16,17 @@ $light-theme:   mat-light-theme($light-primary, $light-accent, $light-warn);
 
 // Define an dark theme.
 $dark-primary: mat-palette($mat-indigo);
-$dark-accent:  mat-palette($mat-blue-gray);
-$dark-warn:    mat-palette($mat-deep-orange);
-$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+$dark-accent: mat-palette($mat-blue-gray);
+$dark-warn: mat-palette($mat-deep-orange);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
 // themes will be switched based on class names, angular will switch classes which will trigger the theme change
-.dark-theme{
+.dark-theme {
   @include angular-material-theme($dark-theme);
   @import "prismjs/themes/prism-Tomorrow";
 }
 
-.light-theme{
+.light-theme {
   @import "prismjs/themes/prism";
   @include angular-material-theme($light-theme);
 }
@@ -45,4 +45,3 @@ body {
   color: #fff !important;
   background-color: rgb(242, 58, 47) !important;
 }
-  

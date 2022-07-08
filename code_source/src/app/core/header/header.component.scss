@@ -1,18 +1,24 @@
-.spacer{
+.spacer {
     flex: 1 1 auto;
 }
 
-.top{
+.top {
     position: sticky;
     position: -webkit-sticky;
-    top: 0; 
-    z-index: 1000; 
+    top: 0;
+    z-index: 1000;
 }
 
-.titre{
-    text-decoration:none;
+.titre {
+    text-decoration: none;
 }
 
-.titre:visited{
-    color:inherit; 
+.titre:visited {
+    color: inherit;
+}
+
+.container {
+    display: flex;
+    margin: auto;
+    width: 55em;
 }

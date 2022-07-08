@@ -1,5 +1,7 @@
 <mat-toolbar color="primary" *ngIf="book">
-  Lecture : {{ book.name }}
+  <div class="headerContainer">
+    Lecture : {{ book.name }}
+  </div>
 </mat-toolbar>
 
 <mat-spinner *ngIf="!book"></mat-spinner>

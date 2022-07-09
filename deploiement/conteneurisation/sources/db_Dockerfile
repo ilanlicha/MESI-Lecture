@@ -1,8 +1,0 @@
-FROM mongo:5.0.8
-
-WORKDIR /data
-COPY init-db.sh .
-RUN chmod +x init-db.sh &&\
-    ./init-db.sh
-
-EXPOSE 27017

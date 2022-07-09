@@ -40,5 +40,12 @@ export interface Book {
 }
 
 export interface Content {
-    content: string;
+    info: [
+        title: string,
+        author: string
+    ];
+    section: [
+        id: string,
+        htmlString: string
+    ];
 }

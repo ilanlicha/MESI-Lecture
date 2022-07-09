@@ -6,6 +6,8 @@ import { MatSliderChange } from '@angular/material/slider';
 import { Book } from '../interfaces';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
+import { Epub } from '@gxl/epub-parser/lib/parseEpub';
+
 
 export interface Tile {
   cols: number;
@@ -42,7 +44,7 @@ export class ReadBookComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.id = params['id'];
     })
@@ -57,10 +59,12 @@ export class ReadBookComponent implements OnInit {
       ];
 
       this.homeService.getContent(this.book.name).subscribe(content => {
-        this.contenu = content.message.split(' ');
-        this.mot = this.contenu[this.index];
+        // this.contenu = content.message.split(' ');
+        // this.mot = this.contenu[this.index];
+        console.log(content);
       });
     });
+
   }
 
   start() {

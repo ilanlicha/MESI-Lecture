@@ -27,9 +27,9 @@ export class HomeService {
     return this.httpClient.get<Book>(this.baseUrl + "/book", { params: params });
   }
 
-  getContent(name: string): Observable<ApiResponse> {
+  getContent(name: string): Observable<any> {
     let params = new HttpParams().set("name", name);
-    return this.httpClient.get<ApiResponse>(this.baseUrl + "/content", { params: params });
+    return this.httpClient.get<any>(this.baseUrl + "/content", { params: params });
   }
   // POST
 

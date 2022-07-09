@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var { exec } = require("child_process");
 var readLastLines = require('read-last-lines');
 const { callbackify } = require("util");
+const { parseEpub } = require("@gxl/epub-parser");
 
 // Créer une nouvelle instance du serveur express
 var app = express();
@@ -60,10 +61,9 @@ app.get('/api/content', (req, res) => {
     let name = req.query.name;
     var dir = "./books/" + name + "/" + name + ".txt";
 
-    fs.readFile(dir, (err, data) => {
+    parseEpub('./books/cybersecurityopswithbash.epub').then(result => {
         res.status(200).json({
-            message: data.toString(),
-            status: 200
+            book: result
         });
     });
 });

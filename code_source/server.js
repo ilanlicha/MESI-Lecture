@@ -34,7 +34,7 @@ mongoose.connect('mongodb://localhost:27017/livre');
 mongoose.model('livre',
     new Schema({
         name: String, auteur: String, description: String, couvertureData: Buffer,
-        lectureIndex: Number
+        pageIndex: Number, motIndex: Number
     }, {
         versionKey: false
     }),
@@ -58,10 +58,10 @@ app.get('/api/book', (req, res) => {
 });
 
 app.get('/api/content', (req, res) => {
-    let name = req.query.name;
-    var dir = "./books/" + name + "/" + name + ".txt";
+    let id = req.query.id;
+    var dir = "./books/" + id + "/livre.epub";
 
-    parseEpub('./books/cybersecurityopswithbash.epub').then(result => {
+    parseEpub(dir).then(result => {
         res.status(200).json({
             book: result
         });
@@ -71,7 +71,7 @@ app.get('/api/content', (req, res) => {
 
 // POST
 
-function create(name, auteur, description, contenu, couvertureData, res) {
+function create(name, auteur, description, livreFile, couvertureData, res) {
     livre.find({ name: name }, function (err, docs) {
         if (docs.length) {
             res.status(409).json({
@@ -85,20 +85,23 @@ function create(name, auteur, description, contenu, couvertureData, res) {
                     auteur,
                     description,
                     couvertureData,
-                    lectureIndex: 0
-                });
-                var dir = "./books/" + name + "/";
+                    pageIndex: 0,
+                    motIndex: 0
+                }, function (err, obj) {
+                    var dir = "./books/" + obj.id + "/";
 
-                if (!fs.existsSync(dir)) {
-                    fs.mkdirSync(dir, { recursive: true });
-                }
+                    if (!fs.existsSync(dir)) {
+                        fs.mkdirSync(dir, { recursive: true });
+                    }
 
-                fs.writeFile(dir + name + ".txt", contenu, function (err) {
-                    if (err) throw err;
-                });
-                res.status(201).json({
-                    message: 'Livre créé',
-                    status: 201
+                    fs.writeFile(dir + "livre.epub", livreFile.data, function (err) {
+                        if (err) throw err;
+                    });
+
+                    res.status(201).json({
+                        message: 'Livre créé',
+                        status: 201
+                    });
                 });
             } catch (e) {
                 res.status(500).json({
@@ -114,20 +117,20 @@ app.post('/api/create', (req, res) => {
     var name = req.body.name;
     var auteur = req.body.auteur;
     var description = req.body.description;
-    var contenu = req.body.contenu;
+    var livre = req.files.livre;
 
     var couvertureData;
     if (req.body.image === "oui") {
         couvertureData = req.files.couverture.data;
-        create(name, auteur, description, contenu, couvertureData, res);
+        create(name, auteur, description, livre, couvertureData, res);
     } else
         fs.readFile("./books/default/default.jpg", (err, data) => {
             couvertureData = data;
-            create(name, auteur, description, contenu, couvertureData, res);
+            create(name, auteur, description, livre, couvertureData, res);
         });
 });
 
 app.put('/api/readindex', (req, res) => {
-    const { id, lectureIndex } = req.body;
-    livre.findByIdAndUpdate({ _id: id }, { lectureIndex: lectureIndex }, function (err, obj) { });
+    const { id, pageIndex, motIndex } = req.body;
+    livre.findByIdAndUpdate({ _id: id }, { pageIndex: pageIndex, motIndex: motIndex }, function (err, obj) { });
 });

@@ -25,11 +25,15 @@ export class ReadBookComponent implements OnInit {
 
   id!: string;
   book!: Book;
-  contenu!: string[];
+  contenu: Array<any> = [];
   mot!: string;
-  index!: number;
-  tmpIndex!: number;
+  pageIndex!: number;
+  motIndex!: number;
+  tmpMotIndex!: number;
+  tmpPageIndex!: number;
   speed: number = 500;
+  nbPages!: number;
+  nbMotDansPageActuelle!: number;
 
   intervalId = 0;
   intervalStarted: boolean = false;
@@ -51,33 +55,57 @@ export class ReadBookComponent implements OnInit {
 
     this.homeService.getBookById(this.id).subscribe(book => {
       this.book = book;
-      this.index = book.lectureIndex;
-      this.tmpIndex = book.lectureIndex;
+      this.pageIndex = book.pageIndex;
+      this.tmpPageIndex = book.pageIndex;
+      this.motIndex = book.motIndex;
+      this.tmpMotIndex = book.motIndex;
       this.tiles = [
         { text: this.book.description, cols: 3, rows: 2, index: 1 },
         { text: 'Image', cols: 1, rows: 2, index: 2 }
       ];
 
-      this.homeService.getContent(this.book.name).subscribe(content => {
-        // this.contenu = content.message.split(' ');
-        // this.mot = this.contenu[this.index];
-        console.log(content);
+      this.homeService.getContent(this.book._id).subscribe(content => {
+        content.book.sections.forEach((section: any) => {
+          if (section.htmlString.includes("type=\"chapter\"") || section.htmlString.includes("type=\"subchapter\""))
+            this.contenu.push(section);
+        });
+
+        this.nbPages = this.contenu.length;
+
+        this.contenu.forEach((page, index) => {
+          this.contenu[index].htmlString = this.htmlToText(page.htmlString.substring(page.htmlString.indexOf("</div></div></div>") + 18, page.htmlString.length)).split(' ');;
+        });
+        console.log(this.contenu);
+        this.nbMotDansPageActuelle = this.contenu[this.pageIndex].htmlString.length;
+        this.mot = this.contenu[this.pageIndex].htmlString[this.motIndex];
       });
     });
+  }
 
+  htmlToText(html: any) {
+    var tmp = document.createElement('DIV');
+    html = html.replaceAll(/["'\n+]/g, "");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
   }
 
   start() {
     if (this.intervalStarted === false) {
       this.intervalStarted = true;
       this.intervalId = window.setInterval(() => {
-        this.mot = this.contenu[this.index];
-        if (this.index === this.contenu.length - 1) {
-          this.reset();
-          this.dialog.open(DialogLectureFinie);
+        if (this.motIndex === this.nbMotDansPageActuelle) {
+          if (this.pageIndex + 1 === this.nbPages) {
+            this.reset();
+            this.dialog.open(DialogLectureFinie);
+          } else {
+            this.mot = this.contenu[this.pageIndex].htmlString[this.motIndex];
+            this.pageIndex++;
+            this.motIndex = 0;
+          }
+        } else {
+          this.mot = this.contenu[this.pageIndex].htmlString[this.motIndex];
+          this.motIndex++;
         }
-        else
-          this.index++;
       }, this.speed);
     }
   }
@@ -97,8 +125,9 @@ export class ReadBookComponent implements OnInit {
   }
 
   reset() {
-    this.index = 0;
-    this.mot = this.contenu[this.index];
+    this.pageIndex = 0;
+    this.motIndex = 0;
+    this.mot = this.contenu[this.pageIndex].htmlString[this.motIndex];
     this.pause();
   }
 
@@ -158,8 +187,10 @@ export class ReadBookComponent implements OnInit {
   }
 
   updateIndex() {
-    if (this.index !== this.tmpIndex)
-      this.homeService.updateReadIndex(this.book._id, this.index === 0 ? this.index : this.index - 1).subscribe();
+    if (this.pageIndex !== this.tmpPageIndex || this.motIndex !== this.tmpMotIndex) {
+      this.homeService.updateReadIndex(this.book._id, this.pageIndex,
+        this.motIndex === 0 ? this.motIndex : this.motIndex - 1).subscribe();
+    }
   }
 
   @HostListener('window:beforeunload', ['$event'])

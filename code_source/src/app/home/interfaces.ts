@@ -36,7 +36,8 @@ export interface Book {
     auteur: string;
     description: string;
     couvertureData: Buffer;
-    lectureIndex: number;
+    pageIndex: number;
+    motIndex: number;
 }
 
 export interface Content {

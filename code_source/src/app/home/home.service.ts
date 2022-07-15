@@ -27,20 +27,20 @@ export class HomeService {
     return this.httpClient.get<Book>(this.baseUrl + "/book", { params: params });
   }
 
-  getContent(name: string): Observable<any> {
-    let params = new HttpParams().set("name", name);
+  getContent(id: string): Observable<any> {
+    let params = new HttpParams().set("id", id);
     return this.httpClient.get<any>(this.baseUrl + "/content", { params: params });
   }
   // POST
 
-  create(name: string, auteur: string, description: string, contenu: string, couverture: File | null): Observable<ApiResponse> {
+  create(name: string, auteur: string, description: string, livre: File, couverture: File | null): Observable<ApiResponse> {
 
     const formData = new FormData();
 
     formData.append("name", name);
     formData.append("auteur", auteur);
     formData.append("description", description);
-    formData.append("contenu", contenu);
+    formData.append("livre", livre);
     if (couverture === null)
       formData.append("image", "non");
     else {
@@ -49,18 +49,15 @@ export class HomeService {
     }
 
     return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", formData);
-
-
-    // return this.httpClient.post<ApiResponse>(this.baseUrl + "/create", {
-    //   name: name, auteur: auteur, description: description, contenu: contenu, couverture: couverture
-    // });
   }
 
   // PUT
 
-  updateReadIndex(id: string, lectureIndex: number) {
+  updateReadIndex(id: string, pageIndex: number, motIndex: number) {
+    console.log("test");
+
     return this.httpClient.put(this.baseUrl + "/readindex", {
-      id: id, lectureIndex: lectureIndex
+      id: id, motIndex: motIndex, pageIndex: pageIndex
     });
   }
 

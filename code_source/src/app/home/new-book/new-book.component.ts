@@ -17,10 +17,10 @@ export class NewBookComponent implements OnInit {
   createForm = this.formBuilder.group({
     name: ['', [Validators.required]],
     auteur: [''],
-    description: [''],
-    contenu: ['']
+    description: ['']
   });
 
+  livre!: File;
   couverture!: File;
 
   constructor(private formBuilder: FormBuilder, private homeService: HomeService,
@@ -32,9 +32,8 @@ export class NewBookComponent implements OnInit {
     let name = this.createForm.value.name;
     let auteur = this.createForm.value.auteur;
     let description = this.createForm.value.description;
-    let contenu = this.createForm.value.contenu;
 
-    this.homeService.create(name, auteur, description, contenu, this.couverture === undefined ? null : this.couverture).pipe(
+    this.homeService.create(name, auteur, description, this.livre, this.couverture === undefined ? null : this.couverture).pipe(
       catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
     ).subscribe(res => {
       this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);
@@ -57,25 +56,34 @@ export class NewBookComponent implements OnInit {
     event.preventDefault();
   }
 
-  onDropSuccess(event: any) {
-    this.save(event.dataTransfer.files[0]);
+  onDropSuccess(event: any, type: string) {
+    this.save(event.dataTransfer.files[0], type);
     event.preventDefault();
   }
 
-  preUpload(event: any) {
-    this.save(event.target.files[0]);
+  preUpload(event: any, type: string) {
+    this.save(event.target.files[0], type);
   }
 
-  save(file: File) {
-    if (file.type.includes('jpeg') || file.type.includes('png')) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (_event) => {
-        this.url = reader.result;
+  save(file: File, type: string) {
+    if (type === 'livre') {
+      if (file.type.includes('epub')) {
+        this.livre = file;
+        this.openSnackBar("Livre enregistré !", 201);
+      } else {
+        this.openSnackBar("Le fichier n'est pas un livre (epub) !", 400);
       }
-      this.couverture = file;
     } else {
-      this.openSnackBar("Le fichier n'est pas une image !", 400);
+      if (file.type.includes('jpeg') || file.type.includes('png')) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (_event) => {
+          this.url = reader.result;
+        }
+        this.couverture = file;
+      } else {
+        this.openSnackBar("Le fichier n'est pas une image !", 400);
+      }
     }
   }
 }

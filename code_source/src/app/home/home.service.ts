@@ -54,8 +54,6 @@ export class HomeService {
   // PUT
 
   updateReadIndex(id: string, pageIndex: number, motIndex: number) {
-    console.log("test");
-
     return this.httpClient.put(this.baseUrl + "/readindex", {
       id: id, motIndex: motIndex, pageIndex: pageIndex
     });

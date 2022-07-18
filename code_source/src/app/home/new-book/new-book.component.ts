@@ -23,22 +23,28 @@ export class NewBookComponent implements OnInit {
   livre!: File;
   couverture!: File;
 
+  livreString: string = "Pas de livre";
+
   constructor(private formBuilder: FormBuilder, private homeService: HomeService,
     private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void { }
 
   create() {
-    let name = this.createForm.value.name;
-    let auteur = this.createForm.value.auteur;
-    let description = this.createForm.value.description;
+    if (!this.livre){
+      this.openSnackBar("Veuillez ajouter un livre !", 400);
+    }else{
+      let name = this.createForm.value.name;
+      let auteur = this.createForm.value.auteur;
+      let description = this.createForm.value.description;
 
-    this.homeService.create(name, auteur, description, this.livre, this.couverture === undefined ? null : this.couverture).pipe(
-      catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
-    ).subscribe(res => {
-      this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);
-      this.router.navigate(['/']);
-    });
+      this.homeService.create(name, auteur, description, this.livre, this.couverture === undefined ? null : this.couverture).pipe(
+        catchError(err => of(this.openSnackBar(err.error.message, err.error.status)))
+      ).subscribe(res => {
+        this.openSnackBar(JSON.parse(JSON.stringify(res)).message, JSON.parse(JSON.stringify(res)).status);
+        this.router.navigate(['/']);
+      });
+    }
   }
 
   openSnackBar(message: string, status: number) {
@@ -69,6 +75,7 @@ export class NewBookComponent implements OnInit {
     if (type === 'livre') {
       if (file.type.includes('epub')) {
         this.livre = file;
+        this.livreString = this.livre.name;
         this.openSnackBar("Livre enregistré !", 201);
       } else {
         this.openSnackBar("Le fichier n'est pas un livre (epub) !", 400);
